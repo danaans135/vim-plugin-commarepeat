@@ -1,0 +1,9 @@
+
+'''
+''' $2のプロパティ
+'''
+Public Property $0 As $1
+    Get
+        Return _$0
+    End Get
+End Property

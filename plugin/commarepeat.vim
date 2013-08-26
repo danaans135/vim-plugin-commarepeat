@@ -10,22 +10,27 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " Functions {{{
-"s:CommaRepeat() {{{
-function! s:CommaRepeat() range
+"s:CommaRepeat {{{
+function! s:CommaRepeat(type) range
+  "echo a:type
+  let basedir = $HOME."/Documents/GitHub/vim-plugin-commarepeat/plugin/"
+  let filename = basedir . a:type . ".txt"
+  let tmpllines = readfile(filename)
+
   let alist = []
   let lnum = a:firstline
   while lnum <= a:lastline
-    call extend(alist, s:Tempconv(split(getline(lnum), ",")))
+    call extend(alist, s:Tempconv(tmpllines, split(getline(lnum), ",")))
     let lnum = lnum + 1
   endwhile
   let failed = append(line('$'), alist)
 endfunction
 
 "}}}
-"s:Tempconv() {{{
-function! s:Tempconv(olist)
+"s:Tempconv {{{
+function! s:Tempconv(tmpllines, olist)
   let alist = []
-  for s in readfile($HOME."/Documents/GitHub/vim-plugin-commarepeat/plugin/test.txt")
+  for s in a:tmpllines
     let s = substitute(s, "$0", a:olist[0], "")
     let s = substitute(s, "$1", a:olist[1], "")
     let s = substitute(s, "$2", a:olist[2], "")
@@ -36,8 +41,14 @@ function! s:Tempconv(olist)
 endfunction
 
 "}}}
+"s:CmplList {{{
+function! CmplList(A,L,P)
+  return ["test"]
+endfunction
+
+"}}}
 "}}}
 
-command! -range CommaRepeat :<line1>,<line2>call s:CommaRepeat()
+command! -nargs=1 -range -complete=customlist,CmplList CommaRepeat :<line1>,<line2>call s:CommaRepeat(<q-args>)
 
 let &cpo = s:save_cpo

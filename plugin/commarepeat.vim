@@ -9,6 +9,8 @@ let g:loaded_commarepeat = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Functions {{{
+"s:CommaRepeat() {{{
 function! s:CommaRepeat() range
   let alist = []
   let lnum = a:firstline
@@ -19,16 +21,22 @@ function! s:CommaRepeat() range
   let failed = append(line('$'), alist)
 endfunction
 
+"}}}
+"s:Tempconv() {{{
 function! s:Tempconv(olist)
   let alist = []
   for s in readfile($HOME."/Documents/GitHub/vim-plugin-commarepeat/plugin/test.txt")
     let s = substitute(s, "$0", a:olist[0], "")
     let s = substitute(s, "$1", a:olist[1], "")
     let s = substitute(s, "$2", a:olist[2], "")
+    let s = iconv(s, "utf-8", &enc)
     call add(alist, s)
   endfor
   return alist
 endfunction
+
+"}}}
+"}}}
 
 command! -range CommaRepeat :<line1>,<line2>call s:CommaRepeat()
 

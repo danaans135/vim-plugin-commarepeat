@@ -1,10 +1,10 @@
 " vim:foldmethod=marker:fen:
 scriptencoding utf-8
 
-if exists('g:loaded_commarepeat') && g:loaded_commarepeat
-    finish
-endif
-let g:loaded_commarepeat = 1
+"if exists('g:loaded_commarepeat') && g:loaded_commarepeat
+"    finish
+"endif
+"let g:loaded_commarepeat = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -20,7 +20,9 @@ function! s:CommaRepeat(type) range
   let alist = []
   let lnum = a:firstline
   while lnum <= a:lastline
-    call extend(alist, s:Tempconv(tmpllines, split(getline(lnum), ",")))
+    call extend(alist, s:Tempconv(tmpllines,
+\      split(iconv(getline(lnum), "utf-8", &enc), ",")))
+"\      split(getline(lnum), ",")))
     let lnum = lnum + 1
   endwhile
   let failed = append(line('$'), alist)

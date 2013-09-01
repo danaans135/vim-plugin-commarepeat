@@ -21,8 +21,7 @@ function! s:CommaRepeat(type) range
   let lnum = a:firstline
   while lnum <= a:lastline
     call extend(alist, s:Tempconv(tmpllines,
-\      split(iconv(getline(lnum), "utf-8", &enc), ",")))
-"\      split(getline(lnum), ",")))
+\      split(getline(lnum), ",")))
     let lnum = lnum + 1
   endwhile
   let failed = append(line('$'), alist)
@@ -33,10 +32,10 @@ endfunction
 function! s:Tempconv(tmpllines, olist)
   let alist = []
   for s in a:tmpllines
+    let s = iconv(s, "utf-8", &enc)
     let s = substitute(s, "$0", a:olist[0], "")
     let s = substitute(s, "$1", a:olist[1], "")
     let s = substitute(s, "$2", a:olist[2], "")
-    let s = iconv(s, "utf-8", &enc)
     call add(alist, s)
   endfor
   return alist

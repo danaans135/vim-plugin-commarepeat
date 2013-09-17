@@ -1,10 +1,10 @@
 " vim:foldmethod=marker:fen:
 scriptencoding utf-8
 
-"if exists('g:loaded_commarepeat') && g:loaded_commarepeat
-"    finish
-"endif
-"let g:loaded_commarepeat = 1
+if exists('g:loaded_commarepeat') && g:loaded_commarepeat
+    finish
+endif
+let g:loaded_commarepeat = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -33,9 +33,11 @@ function! s:Tempconv(tmpllines, olist)
   let alist = []
   for s in a:tmpllines
     let s = iconv(s, "utf-8", &enc)
-    let s = substitute(s, "$0", a:olist[0], "")
-    let s = substitute(s, "$1", a:olist[1], "")
-    let s = substitute(s, "$2", a:olist[2], "")
+    let idx = 0
+    for elem in a:olist
+      let s = substitute(s, "$" . idx, elem, "g")
+      let idx += 1
+    endfor
     call add(alist, s)
   endfor
   return alist
@@ -44,7 +46,7 @@ endfunction
 "}}}
 "s:CmplList {{{
 function! CmplList(A,L,P)
-  return ["test"]
+  return ["test","field","prop"]
 endfunction
 
 "}}}
